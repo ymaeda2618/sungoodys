@@ -815,6 +815,7 @@ h6 {
   font-weight: 700;
   letter-spacing: 0.08em;
   font-size: 0.95rem;
+  flex-shrink: 0;
 }
 
 .faq__question {
@@ -1045,6 +1046,41 @@ h6 {
   list-style: disc;
   display: grid;
   gap: 0.35rem;
+}
+
+@media (max-width: 640px) {
+  .company__board {
+    padding: 2rem 1.4rem;
+    border-radius: 22px;
+  }
+
+  .company__board-list {
+    gap: 1rem;
+  }
+
+  .company__board-row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    border: 1px solid rgba(10, 143, 74, 0.15);
+    background: rgba(240, 250, 246, 0.97);
+    box-shadow: 0 14px 28px rgba(10, 143, 74, 0.09);
+  }
+
+  .company__board-row::after {
+    display: none;
+  }
+
+  .company__board-row dt {
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    color: var(--color-primary-600);
+  }
+
+  .company__board-row dd {
+    font-size: 0.98rem;
+  }
 }
 
 .form {
