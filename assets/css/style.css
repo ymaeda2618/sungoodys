@@ -357,8 +357,8 @@ h6 {
   font-weight: 600;
   letter-spacing: 0.1em;
   color: var(--color-primary-600);
-  background: #ffffff;
-  box-shadow: 0 12px 24px rgba(10, 143, 74, 0.25);
+  background: #eaf7f1;
+  box-shadow: 0 12px 24px rgba(10, 143, 74, 0.2);
 }
 
 .hero__title {
@@ -380,8 +380,8 @@ h6 {
   font-size: clamp(1.1rem, 2.6vw, 1.4rem);
   font-weight: 600;
   letter-spacing: 0.06em;
-  background: #7fc92b;
-  color: #ffffff;
+  background: #dff5ea;
+  color: var(--color-primary-600);
 }
 
 .hero__title-emphasis {
@@ -389,8 +389,8 @@ h6 {
   font-weight: 700;
   letter-spacing: 0.04em;
   white-space: nowrap;
-  background: #7fc92b;
-  color: #ffffff;
+  background: #ccebdf;
+  color: var(--color-primary-600);
 }
 
 .hero__text {
@@ -1320,8 +1320,8 @@ h6 {
 
 .site-footer {
   margin-top: clamp(4rem, 8vw, 6rem);
-  background: linear-gradient(135deg, #7fce2f, #4ab358);
-  color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(135deg, #eefaf3, #cfeede);
+  color: rgba(7, 67, 42, 0.9);
   padding: clamp(3rem, 6vw, 5rem) 0 2rem;
   text-align: center;
 }
@@ -1348,8 +1348,8 @@ h6 {
 }
 
 .site-footer__nav {
-  border-top: 1px solid rgba(255, 255, 255, 0.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(7, 67, 42, 0.15);
+  border-bottom: 1px solid rgba(7, 67, 42, 0.15);
   padding: 1.2rem 0;
   margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
 }
@@ -1365,7 +1365,7 @@ h6 {
 }
 
 .site-footer__links a {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(7, 67, 42, 0.85);
   text-decoration: none;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1374,7 +1374,7 @@ h6 {
 
 .site-footer__links a:hover,
 .site-footer__links a:focus-visible {
-  color: #ffffff;
+  color: #06402a;
   text-decoration: underline;
 }
 
@@ -1385,7 +1385,7 @@ h6 {
 .site-footer__copy {
   margin: 0;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(6, 63, 40, 0.75);
 }
 
 @media (max-width: 1200px) {
