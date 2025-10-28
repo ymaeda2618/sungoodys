@@ -1523,6 +1523,33 @@ h6 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.85;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.site-footer__tagline span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-footer__tagline-region::before {
+  content: "｜";
+  margin-right: 0.6rem;
+}
+
+@media (max-width: 767px) {
+  .site-footer__tagline {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .site-footer__tagline-region::before {
+    content: "";
+    margin: 0;
+  }
 }
 
 .site-footer__address {
@@ -1746,11 +1773,14 @@ h6 {
     padding: 1.5rem;
   }
 
+  .site-footer__nav {
+    display: none;
+  }
+
   .site-footer__inner {
     grid-template-columns: 1fr;
   }
 
-  .site-footer__nav,
   .site-footer__contact {
     display: grid;
     gap: 1rem;
