@@ -161,6 +161,10 @@ h6 {
   font-weight: 400;
 }
 
+.section--price .section__subtitle {
+  color: #434343;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
