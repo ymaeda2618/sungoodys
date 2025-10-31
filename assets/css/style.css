@@ -1718,6 +1718,47 @@ h6 {
     width: min(100% - 1.5rem, var(--container-max));
   }
 
+  .section--price::before,
+  .section--price::after {
+    content: none;
+  }
+
+  .section--price .section__header {
+    position: relative;
+    margin-inline: -0.75rem;
+    padding: 1.75rem 1.5rem;
+  }
+
+  .section--price .section__header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../img/pixta_75650225.jpg") center/cover no-repeat;
+    z-index: -2;
+  }
+
+  .section--price .section__header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(240, 250, 245, 0.5) 55%,
+      rgba(230, 248, 241, 0.97) 100%
+    );
+    z-index: -1;
+  }
+
+  .section--price .section__header > * {
+    position: relative;
+  }
+
+  .section--price .section__eyebrow {
+    letter-spacing: 0.16em;
+    opacity: 0.85;
+  }
+
   .site-header__inner {
     gap: 0.75rem;
     padding: 0.75rem 0;
