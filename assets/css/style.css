@@ -1819,6 +1819,9 @@ h6 {
     transition: transform var(--transition-base);
     box-shadow: -4px 0 16px rgba(0, 0, 0, 0.08);
     padding: 4.5rem 2rem 2rem;
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     z-index: 950;
   }
 
