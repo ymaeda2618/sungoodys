@@ -443,35 +443,49 @@ h6 {
 }
 
 .hero__tagline {
+  position: relative;
   width: fit-content;
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.1rem 0;
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  gap: 0.3rem;
+  padding: 0.15rem 0.35rem;
+  font-size: clamp(1rem, 2.6vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: clamp(0.12em, 0.55vw, 0.22em);
   color: #ffffff;
   text-shadow:
-    0 -1px 1px rgba(255, 255, 255, 0.95),
-    0 1px 1px rgba(20, 20, 20, 0.55),
-    0 2px 2px rgba(12, 12, 12, 0.5),
-    0 4px 5px rgba(8, 8, 8, 0.45),
-    0 0 14px rgba(255, 255, 255, 0.85),
-    0 0 28px rgba(255, 255, 255, 0.65);
+    0 -1px 2px rgba(255, 255, 255, 0.8),
+    0 2px 4px rgba(8, 18, 12, 0.65),
+    0 10px 22px rgba(5, 15, 9, 0.55),
+    0 0 36px rgba(10, 143, 74, 0.45);
+}
+
+.hero__tagline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8), rgba(10, 143, 74, 0.95));
+  box-shadow: 0 0 12px rgba(10, 143, 74, 0.6);
 }
 
 .hero__title {
+  position: relative;
   display: grid;
-  gap: 0.5rem;
+  gap: clamp(0.35rem, 1.2vw, 0.8rem);
+  isolation: isolate;
 }
 
 .hero__title span,
 .hero__title-emphasis {
+  position: relative;
   display: inline-flex;
   align-self: flex-start;
   align-items: center;
-  padding: 0.75rem 1.6rem;
+  padding: 0;
   background: transparent;
   color: #ffffff;
   box-shadow: none;
@@ -479,46 +493,106 @@ h6 {
 
 .hero__title-line {
   width: fit-content;
-  font-size: clamp(1.1rem, 2.6vw, 1.4rem);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: clamp(1.2rem, 3vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: clamp(0.05em, 0.4vw, 0.14em);
+  color: #ffffff;
+  background-image: linear-gradient(120deg, #ffffff 0%, #f4fff0 40%, #bff8db 75%, #ffffff 100%);
+  background-size: 200% auto;
+  animation: hero-title-shine 10s ease-in-out infinite;
+  -webkit-text-stroke: 0.6px rgba(10, 28, 18, 0.45);
   text-shadow:
-    0 -1px 2px rgba(255, 255, 255, 0.85),
-    0 2px 3px rgba(7, 45, 25, 0.7),
-    0 4px 6px rgba(6, 38, 21, 0.6),
-    0 0 22px rgba(10, 143, 74, 0.55);
+    0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 4px rgba(6, 32, 19, 0.65),
+    0 6px 10px rgba(4, 12, 8, 0.45);
+}
+
+.hero__title-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.45rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  opacity: 0.85;
 }
 
 .hero__title-emphasis {
-  font-size: clamp(2.3rem, 5.2vw, 3.6rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  font-weight: 800;
+  letter-spacing: clamp(0.02em, 0.35vw, 0.08em);
   white-space: nowrap;
+  color: #ffffff;
+  background-image: linear-gradient(105deg, #ffffff 0%, #f4ffe9 35%, #b9ffd9 65%, #7fe6b6 85%);
+  background-size: 220% auto;
+  animation: hero-title-shine 12s ease-in-out infinite;
+  -webkit-text-stroke: 0.8px rgba(5, 25, 14, 0.4);
   text-shadow:
-    0 -2px 2px rgba(255, 255, 255, 0.9),
-    0 2px 3px rgba(6, 38, 21, 0.65),
-    0 5px 8px rgba(5, 32, 18, 0.6),
-    0 0 26px rgba(10, 143, 74, 0.55);
+    0 1px 0 rgba(255, 255, 255, 0.95),
+    0 3px 6px rgba(6, 32, 19, 0.65),
+    0 8px 15px rgba(3, 12, 7, 0.5);
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .hero__title-line,
+  .hero__title-emphasis {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+@keyframes hero-title-shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @media (max-width: 600px) {
+  .hero__title {
+    width: 100%;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .hero__title span,
+  .hero__title-emphasis {
+    justify-content: center;
+  }
+
   .hero__tagline {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.9rem;
+    width: 100%;
+    justify-content: center;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .hero__tagline::after {
+    bottom: -0.2rem;
   }
 
   .hero__title-line {
-    font-size: 0.9rem;
-    padding: 0.55rem 1.3rem;
+    font-size: 1rem;
+    padding: 0.35rem 0;
     display: inline-flex;
-    max-width: 90%;
     justify-content: center;
+    white-space: nowrap;
+    max-width: none;
   }
 
   .hero__title-emphasis {
     display: block;
     margin: 0 auto;
-    font-size: clamp(1rem, 4.8vw, 1.35rem);
+    font-size: clamp(1.5rem, 8vw, 2.4rem);
     line-height: 1.55;
     white-space: normal;
     text-align: center;
