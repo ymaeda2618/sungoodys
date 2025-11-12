@@ -1,11 +1,5 @@
 "use strict";
 
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-
-let emailJsInitialized = false;
-
 document.addEventListener("DOMContentLoaded", () => {
   initSmoothScroll();
   initActiveNavOnScroll();
@@ -340,7 +334,6 @@ function initFormValidationAndSubmit() {
     const contactMethodValues = Array.from(
       form.querySelectorAll('input[name="contact_method"]:checked')
     ).map((input) => input.value);
-    const contactMethods = contactMethodValues.join(", ");
     const contactMethodSummary = contactMethodValues
       .map((value) => {
         if (value === "phone") return "電話での連絡を希望";
@@ -348,6 +341,10 @@ function initFormValidationAndSubmit() {
         return value;
       })
       .join(" / ");
+    formData.set(
+      "contact_method_summary",
+      contactMethodSummary || "指定なし"
+    );
 
     let hasError = false;
 
@@ -406,34 +403,7 @@ function initFormValidationAndSubmit() {
     setStatus("送信中です…", null);
 
     try {
-      const emailJsAvailable =
-        typeof window.emailjs !== "undefined" &&
-        EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY" &&
-        EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID" &&
-        EMAILJS_TEMPLATE_ID !== "YOUR_TEMPLATE_ID";
-
-      if (emailJsAvailable && !emailJsInitialized) {
-        window.emailjs.init(EMAILJS_PUBLIC_KEY);
-        emailJsInitialized = true;
-      }
-
-      if (emailJsAvailable) {
-        const templateParams = {
-          name,
-          email,
-          tel: phone || "未入力",
-          message,
-          contact_method: contactMethodSummary || "指定なし",
-        };
-
-        await window.emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID,
-          templateParams
-        );
-      } else {
-        await submitViaFormspree(form, formData);
-      }
+      await submitContactForm(form, formData);
 
       form.reset();
       hideConfirm();
@@ -442,10 +412,15 @@ function initFormValidationAndSubmit() {
         "success"
       );
     } catch (error) {
-      setStatus(
-        getFormErrorMessage(error),
-        "error"
-      );
+      if (error?.fieldErrors) {
+        Object.entries(error.fieldErrors).forEach(([field, messageText]) => {
+          showError(field, messageText);
+        });
+        setStatus("入力内容をご確認ください。", "error");
+        return;
+      }
+
+      setStatus(getFormErrorMessage(error), "error");
     }
   });
 }
@@ -456,23 +431,41 @@ function updateCurrentYear() {
   yearEl.textContent = new Date().getFullYear().toString();
 }
 
-async function submitViaFormspree(form, formData) {
+async function submitContactForm(form, formData) {
   const action = form.getAttribute("action");
-  if (!action || action.includes("{your-id}")) {
+  if (!action) {
     throw new Error("FORM_ENDPOINT_NOT_CONFIGURED");
   }
 
-  const response = await fetch(action, {
-    method: form.method || "POST",
-    body: formData,
-    headers: {
-      Accept: "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("FORM_SUBMIT_FAILED");
+  let response;
+  try {
+    response = await fetch(action, {
+      method: form.method || "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+  } catch {
+    throw new Error("NETWORK_ERROR");
   }
+
+  let responseBody = null;
+  try {
+    responseBody = await response.json();
+  } catch {
+    // ignore JSON parse errors
+  }
+
+  if (!response.ok || !responseBody?.success) {
+    const error = new Error(responseBody?.message || "FORM_SUBMIT_FAILED");
+    if (responseBody?.errors && typeof responseBody.errors === "object") {
+      error.fieldErrors = responseBody.errors;
+    }
+    throw error;
+  }
+
+  return responseBody;
 }
 
 function getFormErrorMessage(error) {
@@ -480,9 +473,16 @@ function getFormErrorMessage(error) {
     return "送信に失敗しました。お手数ですが再度お試しください。";
   }
 
-  if (error.message === "FORM_ENDPOINT_NOT_CONFIGURED") {
-    return "送信設定が完了していません。EmailJSまたはFormspreeの接続設定をご確認ください。";
+  switch (error.message) {
+    case "FORM_ENDPOINT_NOT_CONFIGURED":
+      return "送信先が設定されていません。フォームのaction属性をご確認ください。";
+    case "NETWORK_ERROR":
+      return "通信に失敗しました。ネットワーク環境をご確認のうえ再度お試しください。";
+    case "MAIL_SEND_FAILED":
+      return "メール送信に失敗しました。時間を置いて再度お試しください。";
+    case "METHOD_NOT_ALLOWED":
+      return "不正なリクエストが行われました。ページを再読み込みしてから再度お試しください。";
+    default:
+      return "送信に失敗しました。お手数ですが再度お試しください。";
   }
-
-  return "送信に失敗しました。お手数ですが再度お試しください。";
 }
