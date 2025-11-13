@@ -23,7 +23,13 @@ mb_language('Japanese');
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Asia/Tokyo');
 
-$recipientEmail = 'ryota.i.0320@gmail.com'; // 一時的なテスト宛先
+$logDirectory = __DIR__ . '/storage/logs';
+$logFilePath = null;
+if (is_dir($logDirectory) || mkdir($logDirectory, 0775, true)) {
+    $logFilePath = $logDirectory . '/contact.log';
+}
+
+$recipientEmail = 'ryota.i.0320@gmai.com'; // 一時的なテスト宛先
 $fromEmail = 'no-reply@example.com'; // TODO: 送信ドメインに合わせて設定してください。
 $subjectPrefix = '【サングッディーズ】お問い合わせ';
 
@@ -50,6 +56,32 @@ function formValue(string $key): string
 function sanitizeHeader(string $value): string
 {
     return preg_replace("/[\r\n]+/", '', $value) ?? '';
+}
+
+/**
+ * @param string $event
+ * @param array<string, mixed> $context
+ */
+function logContactEvent(string $event, array $context = []): void
+{
+    global $logFilePath;
+
+    $payload = [
+        'timestamp' => date('Y-m-d H:i:s'),
+        'event' => $event,
+        'context' => $context,
+    ];
+
+    $line = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($line === false) {
+        $line = sprintf('[%s] %s', $payload['timestamp'], $event);
+    }
+
+    if ($logFilePath) {
+        error_log($line . PHP_EOL, 3, $logFilePath);
+    } else {
+        error_log($line);
+    }
 }
 
 $name = formValue('name');
@@ -83,7 +115,17 @@ if (!$agreement) {
     $errors['agreement'] = '個人情報取り扱いへの同意が必要です。';
 }
 
+logContactEvent('REQUEST_RECEIVED', [
+    'name' => $name,
+    'email' => $email,
+    'phone' => $phone !== '' ? $phone : '未入力',
+    'contact_method' => $contactMethodSummary,
+    'agreement' => $agreement ? 'accepted' : 'missing',
+    'message_preview' => mb_strimwidth($message, 0, 120, '…'),
+]);
+
 if (!empty($errors)) {
+    logContactEvent('VALIDATION_FAILED', ['errors' => $errors]);
     http_response_code(422);
     echo json_encode([
         'success' => false,
@@ -128,6 +170,12 @@ $success = mb_send_mail(
 );
 
 if (!$success) {
+    logContactEvent('MAIL_SEND_FAILED', [
+        'recipient' => $recipientEmail,
+        'name' => $name,
+        'email' => $email,
+        'error' => error_get_last(),
+    ]);
     http_response_code(500);
     echo json_encode([
         'success' => false,
@@ -135,6 +183,13 @@ if (!$success) {
     ]);
     exit;
 }
+
+logContactEvent('MAIL_SENT', [
+    'recipient' => $recipientEmail,
+    'name' => $name,
+    'email' => $email,
+    'contact_method' => $contactMethodSummary,
+]);
 
 echo json_encode([
     'success' => true,
