@@ -29,8 +29,8 @@ if (is_dir($logDirectory) || mkdir($logDirectory, 0775, true)) {
     $logFilePath = $logDirectory . '/contact.log';
 }
 
-$recipientEmail = 'ryota.i.0320@gmail.com'; // 一時的なテスト宛先
-$fromEmail = 'no-reply@xs662848.xsrv.jp'; // TODO: 送信ドメインに合わせて設定してください。
+$recipientEmail = 'contact@sungoodys.com'; // 一時的なテスト宛先
+$fromEmail = 'contact@sungoodys.com'; // TODO: 送信ドメインに合わせて設定してください。
 $subjectPrefix = '【サングッディーズ】お問い合わせ';
 
 /**
