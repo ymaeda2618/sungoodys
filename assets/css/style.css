@@ -1842,6 +1842,65 @@ h6 {
   color: rgba(6, 63, 40, 0.75);
 }
 
+@media (max-width: 1440px) {
+  :root {
+    --container-max: 1280px;
+  }
+
+  .section {
+    padding: 4.5rem 0;
+  }
+
+  .site-header .container {
+    padding-inline: clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .site-header__inner {
+    gap: 1rem;
+    padding: 0.7rem 0;
+  }
+
+  .site-header__logo img {
+    width: 148px;
+  }
+
+  .nav__menu {
+    gap: clamp(1rem, 1.8vw, 1.35rem);
+  }
+
+  .nav__link {
+    font-size: 0.82rem;
+    padding: 0.6rem 0;
+    letter-spacing: 0.01em;
+  }
+
+  .site-header__actions {
+    gap: clamp(1rem, 2vw, 1.6rem);
+  }
+
+  .site-header__phone {
+    font-size: 0.95rem;
+  }
+
+  .site-header__cta {
+    padding: 0.78rem 1.35rem;
+    font-size: 0.78rem;
+    min-width: 0;
+  }
+
+  .hero__title {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    line-height: 1.25;
+  }
+
+  .strengths,
+  .card-grid,
+  .price__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.6rem, 2vw, 1.9rem);
+  }
+}
+
 @media (max-width: 1200px) {
   .card-grid {
     grid-template-columns: repeat(2, minmax(240px, 1fr));
